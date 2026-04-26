@@ -3,10 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
         xmlns:local="clr-namespace:MainProject"
         mc:Ignorable="d" Loaded="Window_Loaded"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <Window.Resources>
+        <local:InvertVisibilityConverter x:Key="Inverter"/>
+    </Window.Resources>
+    <Canvas x:Name="MainCanvas">
+        <Grid x:Name="MainScreen" Visibility="{Binding Visibility, ElementName=EntireScreen,Converter={StaticResource Inverter}}" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Frame Grid.Column="1" Name="MainScreenFrame" NavigationUIVisibility="Hidden"/>
+            <Frame Grid.Column="0" Name="MainMenuFrame" NavigationUIVisibility="Hidden"/>
+        </Grid>
+
+        <Grid x:Name="EntireScreen" Visibility="{Binding Visibility, ElementName=MainScreen,Converter={StaticResource Inverter}}"  Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}">
+            <d:Label Content="EntireScreen" HorizontalAlignment="Right"/>
+            <Frame x:Name="EntireScreenFrame" NavigationUIVisibility="Hidden"/>
+        </Grid>
+
+    </Canvas>
 </Window>

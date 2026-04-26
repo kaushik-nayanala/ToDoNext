@@ -4,31 +4,140 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainProject.View"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Background="#b3b3b3" WindowStyle="None" AllowsTransparency="True" MouseDown="Window_MouseDown"
         Title="ProjectSelection" Height="450" Width="800">
-    <Canvas x:Name="MainCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}">
+    <Canvas x:Name="MainCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+        
+        
+        <Grid Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding ElementName=MenuGrid,Path=ActualHeight}"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
-
+            <Label Grid.Column="1" FontSize="15" Padding="10"
+                   Content="ToDoNext is a software build to keep track on what to build next in the project.
+                   &#10;The project could be a software, video editing or a travel itenerary as long as there is"/>
             <Grid Grid.Row="0" Grid.RowSpan="2">
-                <StackPanel>
-                    <Button Content="New Project" Click="NewProject"/>
-                    <Button Content="Open Project" Click="OpenedProject"/>
-                    <Button Content="Recent Project" Click="RecentProject"/>
-                    <Button Content="Exit"/>
+                <Border ClipToBounds="False" Background="#bfbfbf" BorderThickness="1" Margin="4" Grid.RowSpan="2" CornerRadius="5" Height="{Binding ElementName=MenuGrid,Path=ActualHeight}" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
+                            <GradientStop Color="#999999" Offset="0.0"/>
+                            <GradientStop Color="#fcfcfc" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="1"/>
+                    </Border.Effect>
+                </Border>
+                <StackPanel  x:Name="MenuGrid" VerticalAlignment="Top" Background="Transparent">
+                    <Button Content="New Project" MaxHeight="100" Tag="Create a new project that you want a proper track when developing."  Click="NewProject"/>
+                    <Button Content="Open Project" MaxHeight="100" Tag="Already have a project ?&#10;browse it in the file explorer to open." Click="OpenedProject"/>
+                    <Button Content="Recent Project" MaxHeight="100" Tag="Not able to see in saved projects ?&#10; Maybe its recently opened somewhere." Click="RecentProject"/>
+                    <Button Content="Exit" MaxHeight="100" Tag="Opened this application by mistake / not in the mood of using this." Click="ExitApp"/>
                 </StackPanel>
             </Grid>
-
-            <Grid Grid.Row="1" Grid.Column="1" >
-                <Label Content="Saved Projects"/>
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0" >
+                <Border ClipToBounds="False" Background="#bfbfbf" BorderThickness="1" Margin="4" Grid.RowSpan="2" CornerRadius="5"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
+                            <GradientStop Color="#999999" Offset="0.0"/>
+                            <GradientStop Color="#fcfcfc" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Color="Gray">
+                        </DropShadowEffect>
+                    </Border.Effect>
+                </Border>
+                <Label Content="Saved Projects" Margin="10,10,0,0"/>
             </Grid>
         </Grid>
     </Canvas>
+
+    <Window.Resources>
+        <Style TargetType="Button" >
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsPressed" Value="False"/>
+                        <Condition Property="IsMouseOver" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Template" Value="{DynamicResource NotPressedTemplate}"/>
+                    <Setter Property="Height" Value="24"/>
+                    <Setter Property="Margin" Value="10"/>
+                </MultiTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Template" Value="{DynamicResource PressedTemplate}"/>
+                    <Setter Property="Margin" Value="10"/>
+
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Height" From="24" To="75" Duration="0:0:0.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Height" 
+                                 To="24" Duration="0:0:0.1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
+        <ControlTemplate x:Key="NotPressedTemplate" TargetType="Button">
+            <Grid>
+                <Border Height="{TemplateBinding Height}" Background="#b3b3b3" BorderThickness="1" CornerRadius="2">
+                    <Border.BorderBrush>
+
+                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
+                            <GradientStop Color="#999999" Offset="0.0"/>
+                            <GradientStop Color="#fcfcfc" Offset="1" />
+                        </LinearGradientBrush>
+
+                    </Border.BorderBrush>
+                </Border> 
+                <Label Content="{TemplateBinding Content}" Padding="0" Margin="10,2,0,2" FontWeight="SemiBold" Foreground="Black"/>
+            </Grid> 
+        </ControlTemplate>
+        <ControlTemplate x:Key="PressedTemplate" TargetType="Button">
+            <Grid MaxHeight="{Binding Height,ElementName=TextBoxTag}">
+
+                <Border Height="75" VerticalAlignment="Stretch" Background="#fcfcfc" BorderThickness="0" CornerRadius="3">
+                    
+                </Border>
+                <Border Height="24" VerticalAlignment="Top" Background="#b3b3b3"  BorderThickness="1" CornerRadius="2">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
+                            <GradientStop Color="#999999" Offset="0.0"/>
+                            <GradientStop Color="#fcfcfc" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <StackPanel>
+                    <Label Content="{TemplateBinding Content}" Padding="0" Margin="10,2,0,2" FontWeight="SemiBold" Foreground="Black"/>
+                    <TextBox x:Name="TextBoxTag" Text="{TemplateBinding Tag}" HorizontalAlignment="Stretch" IsReadOnly="True" Background="Transparent" BorderThickness="0" Margin="10,5,0,2" Padding="0" Foreground="Black" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+        </ControlTemplate>
+        <Style x:Key="Movement" TargetType="Path">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="StrokeDashOffset" From="0" To="100" RepeatBehavior="Forever" Duration="0:0:1" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 </Window>

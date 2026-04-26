@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Reflection;
 using MainProject.View;
 using MainProject.Model;
+using System.Reflection.Metadata.Ecma335;
 namespace MainProject
 {
     /// <summary>
@@ -19,6 +20,7 @@ namespace MainProject
     public partial class MainWindow : Window
     {
         private ProjectSelectionOptions? StartUpSequence {  get; set; }
+        public static MainWindow? Instance { get; set; }
         public MainWindow()
         {
 
@@ -27,17 +29,19 @@ namespace MainProject
                 var project = new ProjectSelection();
                 project.ShowDialog();
                 StartUpSequence = project.SelectedOption;
-
+                Instance = this;
                 switch (project.SelectedOption)
                 {
                     case ProjectSelectionOptions.New:
-                    case ProjectSelectionOptions.Recent:
-                    case ProjectSelectionOptions.Opened:
-                    case ProjectSelectionOptions.Saved:
+                    //case ProjectSelectionOptions.Recent:
+                    //case ProjectSelectionOptions.Opened:
+                    //case ProjectSelectionOptions.Saved:
                         InitializeComponent();
                         return;
                 }
+
                 this.Close();
+                Environment.Exit(0);
             }
 
             catch (Exception ex)
@@ -50,8 +54,45 @@ namespace MainProject
         {
             try
             {
-
+                switch (this.StartUpSequence)
+                {
+                    case ProjectSelectionOptions.New:
+                        Dispatcher.Invoke(() =>
+                        {
+                            var Project = new CreateProject();
+                            this.Height = Project.Height;
+                            this.Width  = Project.Width;
+                            this.EntireScreen.Visibility = Visibility.Visible;
+                            this.EntireScreenFrame.Content = Project;
+                        });
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex} at {MethodBase.GetCurrentMethod()}");
+            }
+        }
+
+        public void SetUpNewProject(string PName,string PDescription)
+        {
+            try
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    if (this.EntireScreen.Visibility == Visibility.Visible)
+                    {
+                        this.EntireScreen.Visibility = Visibility.Collapsed;
+                        this.EntireScreenFrame.Content = null;
+                        this.Height = SystemParameters.FullPrimaryScreenHeight;
+                        this.Width  = SystemParameters.FullPrimaryScreenWidth;
+                        this.WindowState =WindowState.Maximized;
+                        this.MainScreenFrame.Content = new Homepage();
+                        this.MainMenuFrame.Content   = new BasicElementPanel();
+                    }
+                });
+            }
+
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex} at {MethodBase.GetCurrentMethod()}");

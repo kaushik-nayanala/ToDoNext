@@ -86,5 +86,25 @@ namespace MainProject.View
                 MessageBox.Show($"{ex} at {MethodBase.GetCurrentMethod()}");
             }
         }
+
+        private void ExitApp(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SelectedOption = ProjectSelectionOptions.None;
+                //Future logic 
+                this.Close();
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex} at {MethodBase.GetCurrentMethod()}");
+            }
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
 }

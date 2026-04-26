@@ -10,4 +10,9 @@ namespace MainProject.Model
     {
         None, New, Recent,Saved,Opened
     }
+
+    public enum BasicOptions
+    {
+        Save,Exit,GoBack
+    }
 }
