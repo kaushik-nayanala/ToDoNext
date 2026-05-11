@@ -3,63 +3,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MainProject.View"
-        mc:Ignorable="d" Background="#b3b3b3" WindowStyle="None" AllowsTransparency="True" MouseDown="Window_MouseDown"
+        xmlns:local="clr-namespace:MainProject"
+        mc:Ignorable="d" Background="Transparent" WindowStyle="None" AllowsTransparency="True" MouseDown="Window_MouseDown"
         Title="ProjectSelection" Height="450" Width="800">
-    <Canvas x:Name="MainCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
-        
-        
-        <Grid Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}" Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="3*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{Binding ElementName=MenuGrid,Path=ActualHeight}"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Grid.Column="1" FontSize="15" Padding="10"
-                   Content="ToDoNext is a software build to keep track on what to build next in the project.
-                   &#10;The project could be a software, video editing or a travel itenerary as long as there is"/>
-            <Grid Grid.Row="0" Grid.RowSpan="2">
-                <Border ClipToBounds="False" Background="#bfbfbf" BorderThickness="1" Margin="4" Grid.RowSpan="2" CornerRadius="5" Height="{Binding ElementName=MenuGrid,Path=ActualHeight}" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-                    <Border.BorderBrush>
-                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
-                            <GradientStop Color="#999999" Offset="0.0"/>
-                            <GradientStop Color="#fcfcfc" Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.BorderBrush>
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="5" ShadowDepth="1"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel  x:Name="MenuGrid" VerticalAlignment="Top" Background="Transparent">
-                    <Button Content="New Project" MaxHeight="100" Tag="Create a new project that you want a proper track when developing."  Click="NewProject"/>
-                    <Button Content="Open Project" MaxHeight="100" Tag="Already have a project ?&#10;browse it in the file explorer to open." Click="OpenedProject"/>
-                    <Button Content="Recent Project" MaxHeight="100" Tag="Not able to see in saved projects ?&#10; Maybe its recently opened somewhere." Click="RecentProject"/>
-                    <Button Content="Exit" MaxHeight="100" Tag="Opened this application by mistake / not in the mood of using this." Click="ExitApp"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0" >
-                <Border ClipToBounds="False" Background="#bfbfbf" BorderThickness="1" Margin="4" Grid.RowSpan="2" CornerRadius="5"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <Border.BorderBrush>
-                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
-                            <GradientStop Color="#999999" Offset="0.0"/>
-                            <GradientStop Color="#fcfcfc" Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.BorderBrush>
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Color="Gray">
-                        </DropShadowEffect>
-                    </Border.Effect>
-                </Border>
-                <Label Content="Saved Projects" Margin="10,10,0,0"/>
-            </Grid>
-        </Grid>
-    </Canvas>
-
     <Window.Resources>
-        <Style TargetType="Button" >
+        <local:VisualBrushScaleConverter x:Key="ScaleImageToElement"/>
+        <ControlTemplate TargetType="Label" x:Key="BlurEffect">
+            <Grid>
+
+                <Border x:Name="BlurElement" CornerRadius="10"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Border.Effect>
+                        <BlurEffect Radius="10"/>
+                    </Border.Effect>
+                    <Border.Background>
+                        <VisualBrush  Visual="{Binding ElementName=BackgroundImage}" Stretch="Fill">
+                            <VisualBrush.RelativeTransform>
+                                <MultiBinding Converter="{StaticResource ScaleImageToElement }">
+                                    <Binding ElementName="BlurElement" Path="Width"/>
+                                    <Binding ElementName="BlurElement" Path="Height"/>
+                                    <Binding ElementName="BackgroundImage" Path="Width"/>
+                                    <Binding ElementName="BackgroundImage" Path="Height"/>
+                                    <Binding ElementName="BlurElement" Path="(Canvas.Left)"/>
+                                    <Binding ElementName="BlurElement" Path="(Canvas.Top)"/>
+                                </MultiBinding>
+                            </VisualBrush.RelativeTransform>
+                        </VisualBrush>
+                    </Border.Background>
+                </Border>
+                <Border Opacity="0.5" BorderBrush="Transparent" CornerRadius="{Binding ElementName=BlurElement,Path=CornerRadius}" Canvas.Left="{Binding ElementName=BlurElement,Path = (Canvas.Left)}" Canvas.Top="{Binding ElementName=BlurElement,Path = (Canvas.Top)}" Height="{Binding ElementName=BlurElement,Path=ActualHeight}" Width="{Binding ElementName=BlurElement,Path=ActualWidth}" Background="{TemplateBinding Background}" BorderThickness="1" Margin="-1.5"/>
+                <Border Opacity="1"    BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="{Binding ElementName=BlurElement,Path=CornerRadius}" Canvas.Left="{Binding ElementName=BlurElement,Path = (Canvas.Left)}" Canvas.Top="{Binding ElementName=BlurElement,Path = (Canvas.Top)}" Height="{Binding ElementName=BlurElement,Path=ActualHeight}" Width="{Binding ElementName=BlurElement,Path=ActualWidth}" Background="Transparent" BorderThickness="1" Margin="-1.5"/>
+
+            </Grid>
+        </ControlTemplate>
+        <Style TargetType="Button">
             <Style.Triggers>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -67,65 +43,48 @@
                         <Condition Property="IsMouseOver" Value="False"/>
                     </MultiTrigger.Conditions>
                     <Setter Property="Template" Value="{DynamicResource NotPressedTemplate}"/>
-                    <Setter Property="Height" Value="24"/>
+                    <Setter Property="Height" Value="50"/>
                     <Setter Property="Margin" Value="10"/>
+                    <Setter Property="BorderThickness" Value="0"/>
                 </MultiTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Template" Value="{DynamicResource PressedTemplate}"/>
+                    <Setter Property="Height" Value="50"/>
                     <Setter Property="Margin" Value="10"/>
-
-                    <Trigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Height" From="24" To="75" Duration="0:0:0.5" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.EnterActions>
-                    <Trigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Height" 
-                                 To="24" Duration="0:0:0.1" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.ExitActions>
+                    <Setter Property="BorderThickness" Value="0"/>
                 </Trigger>
             </Style.Triggers>
-
         </Style>
-        <ControlTemplate x:Key="NotPressedTemplate" TargetType="Button">
+        <ControlTemplate x:Key="PressedTemplate" TargetType="Button">
             <Grid>
-                <Border Height="{TemplateBinding Height}" Background="#b3b3b3" BorderThickness="1" CornerRadius="2">
-                    <Border.BorderBrush>
-
-                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
-                            <GradientStop Color="#999999" Offset="0.0"/>
-                            <GradientStop Color="#fcfcfc" Offset="1" />
-                        </LinearGradientBrush>
-
-                    </Border.BorderBrush>
-                </Border> 
-                <Label Content="{TemplateBinding Content}" Padding="0" Margin="10,2,0,2" FontWeight="SemiBold" Foreground="Black"/>
+                <Label BorderBrush="White" Background="Green" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"  Template="{StaticResource BlurEffect}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Content="{TemplateBinding Content}" Height="{TemplateBinding Height}" FontSize="22" Padding="0" Margin="50,2,0,2" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="Black"/>
             </Grid> 
         </ControlTemplate>
-        <ControlTemplate x:Key="PressedTemplate" TargetType="Button">
+        <ControlTemplate x:Key="NotPressedTemplate" TargetType="Button">
             <Grid MaxHeight="{Binding Height,ElementName=TextBoxTag}">
-
-                <Border Height="75" VerticalAlignment="Stretch" Background="#fcfcfc" BorderThickness="0" CornerRadius="3">
-                    
-                </Border>
-                <Border Height="24" VerticalAlignment="Top" Background="#b3b3b3"  BorderThickness="1" CornerRadius="2">
-                    <Border.BorderBrush>
-                        <LinearGradientBrush StartPoint="0.1,0" EndPoint="0.095,.36">
-                            <GradientStop Color="#999999" Offset="0.0"/>
-                            <GradientStop Color="#fcfcfc" Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.BorderBrush>
-                </Border>
-                <StackPanel>
-                    <Label Content="{TemplateBinding Content}" Padding="0" Margin="10,2,0,2" FontWeight="SemiBold" Foreground="Black"/>
-                    <TextBox x:Name="TextBoxTag" Text="{TemplateBinding Tag}" HorizontalAlignment="Stretch" IsReadOnly="True" Background="Transparent" BorderThickness="0" Margin="10,5,0,2" Padding="0" Foreground="Black" TextWrapping="Wrap"/>
-                </StackPanel>
+                <Label  Background="Black" Opacity="1" Template="{StaticResource BlurEffect}" BorderBrush="Black" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Content="{TemplateBinding Content}" Height="{TemplateBinding Height}" FontSize="22" Padding="0" Margin="50,2,0,2" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
             </Grid>
         </ControlTemplate>
         <Style x:Key="Movement" TargetType="Path">
@@ -140,4 +99,54 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
+    <Canvas x:Name="MainCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+        <Border CornerRadius="4" BorderThickness="1" BorderBrush="Black" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#d9d9d9"/>
+        <Image x:Name="BackgroundImage" Source="/Image/Image1.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
+        <Label  Template="{StaticResource BlurEffect}" BorderBrush="Black" Background="DimGray" Height="430" Width="200"  Canvas.Left="10" Canvas.Top="10">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" Direction="0" BlurRadius="5" ShadowDepth="2"/>
+            </Label.Effect>
+        </Label>
+        <Button Content="New" Canvas.Left="10" Canvas.Top="10" Width="180" Click="NewProject"/>
+        <Button Content="Open" Canvas.Left="10" Canvas.Top="70" Width="180" Click="OpenedProject"/>
+        <Button Content="Recent" Canvas.Left="10" Canvas.Top="130" Width="180" Click="RecentProject"/>
+        <Button Content="Exit" Canvas.Left="10" Canvas.Top="190" Width="180" Click="ExitApp"/>
+
+        <Label Height="190" Width="570" Canvas.Top="10" Canvas.Left="220" BorderBrush="Black" Background="DimGray" Template="{StaticResource BlurEffect}">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" Direction="0" BlurRadius="5" ShadowDepth="2"/>
+            </Label.Effect>
+        </Label>
+        <Label Content="ToDoNext is a software build to keep
+            &#10;track on what to do next in the project.
+            &#10;
+            &#10;The project could be:-
+            &#10;* Building a software with new tech stack.
+            &#10;* Editing a large scale video.
+            &#10;* Travel itenerary."
+            Height="140" Width="430" Canvas.Top="20" Canvas.Left="230" FontFamily="Consolas" Foreground="White" FontWeight="Bold" FontSize="15">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="0" ShadowDepth="1"/>
+            </Label.Effect>
+        </Label>
+        <Label Content="As long as a project is build step by step." FontFamily="Consolas" Foreground="LightGray" FontSize="10"
+            Canvas.Top="160" Canvas.Left="230">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="1"/>
+            </Label.Effect>
+        </Label>
+
+        <Label Height="230" Width="570" Canvas.Top="210" Canvas.Left="220" BorderBrush="Black" Background="DimGray" Template="{StaticResource BlurEffect}">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" Direction="0" BlurRadius="5" ShadowDepth="2"/>
+            </Label.Effect>
+        </Label>
+        <Label Canvas.Top="220" Canvas.Left="230" Foreground="White" Content="Saved Projects" FontFamily="Consolas">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" ShadowDepth="1" BlurRadius="0"/>
+            </Label.Effect>
+        </Label>
+        <Label Height="190" Width="550" Canvas.Top="240" Canvas.Left="230" Background="Black" Template="{StaticResource BlurEffect}"/>
+    </Canvas>
+
 </Window>
