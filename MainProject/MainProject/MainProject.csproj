@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Image\Image1.jpg" />
+    <None Remove="Image\Image2.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Image\Image1.jpg" />
+    <Resource Include="Image\Image2.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Utility\" />
     <Folder Include="View\ElementsObject\" />
   </ItemGroup>

@@ -31,9 +31,9 @@ namespace MainProject.View
         {
             try
             {
-                SelectedOption = ProjectSelectionOptions.New;
+                //SelectedOption = ProjectSelectionOptions.New;
                 //Future logic 
-                this.Close();
+                this.BackgroundImage.Visibility  = Visibility.Hidden;
             }
 
             catch (Exception ex)

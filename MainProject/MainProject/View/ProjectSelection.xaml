@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MainProject"
-        mc:Ignorable="d" Background="Transparent" WindowStyle="None" AllowsTransparency="True" MouseDown="Window_MouseDown"
+        xmlns:local="clr-namespace:MainProject" MouseDown="Window_MouseDown"
+        mc:Ignorable="d" Background="Transparent" WindowStyle="None" AllowsTransparency="True"
         Title="ProjectSelection" Height="450" Width="800">
     <Window.Resources>
         <local:VisualBrushScaleConverter x:Key="ScaleImageToElement"/>
+        <local:InvertVisibilityConverter x:Key="InverseVisible"/>
         <ControlTemplate TargetType="Label" x:Key="BlurEffect">
             <Grid>
                 <Border x:Name="BlurElement" CornerRadius="10"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -61,7 +62,7 @@
 
         <ControlTemplate TargetType="Label" x:Key="BlurEffect1">
             <Grid>
-                <Border x:Name="BlurElement" CornerRadius="10"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Border x:Name="BlurElement1" CornerRadius="0"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Border.Effect>
                         <BlurEffect Radius="20"/>
                     </Border.Effect>
@@ -69,19 +70,19 @@
                         <VisualBrush  Visual="{Binding ElementName=BackgroundImage1}" Stretch="Fill">
                             <VisualBrush.RelativeTransform>
                                 <MultiBinding Converter="{StaticResource ScaleImageToElement }">
-                                    <Binding ElementName="BlurElement" Path="Width"/>
-                                    <Binding ElementName="BlurElement" Path="Height"/>
+                                    <Binding ElementName="BlurElement1" Path="Width"/>
+                                    <Binding ElementName="BlurElement1" Path="Height"/>
                                     <Binding ElementName="BackgroundImage1" Path="Width"/>
                                     <Binding ElementName="BackgroundImage1" Path="Height"/>
-                                    <Binding ElementName="BlurElement" Path="(Canvas.Left)"/>
-                                    <Binding ElementName="BlurElement" Path="(Canvas.Top)"/>
+                                    <Binding ElementName="BlurElement1" Path="(Canvas.Left)"/>
+                                    <Binding ElementName="BlurElement1" Path="(Canvas.Top)"/>
                                 </MultiBinding>
                             </VisualBrush.RelativeTransform>
                         </VisualBrush>
                     </Border.Background>
                 </Border>
-                <Border Opacity="0.75" BorderBrush="Transparent" CornerRadius="{Binding ElementName=BlurElement,Path=CornerRadius}" Canvas.Left="{Binding ElementName=BlurElement,Path = (Canvas.Left)}" Canvas.Top="{Binding ElementName=BlurElement,Path = (Canvas.Top)}" Height="{Binding ElementName=BlurElement,Path=ActualHeight}" Width="{Binding ElementName=BlurElement,Path=ActualWidth}" Background="{TemplateBinding Background}" BorderThickness="1" Margin="-1.5"/>
-                <Border Opacity="1"    BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="{Binding ElementName=BlurElement,Path=CornerRadius}" Canvas.Left="{Binding ElementName=BlurElement,Path = (Canvas.Left)}" Canvas.Top="{Binding ElementName=BlurElement,Path = (Canvas.Top)}" Height="{Binding ElementName=BlurElement,Path=ActualHeight}" Width="{Binding ElementName=BlurElement,Path=ActualWidth}" Background="Transparent" BorderThickness="1" Margin="-1.5"/>
+                <Border Opacity="0.5" BorderBrush="Transparent" CornerRadius="{Binding ElementName=BlurElement1,Path=CornerRadius}" Canvas.Left="{Binding ElementName=BlurElement1,Path = (Canvas.Left)}" Canvas.Top="{Binding ElementName=BlurElement1,Path = (Canvas.Top)}" Height="{Binding ElementName=BlurElement1,Path=ActualHeight}" Width="{Binding ElementName=BlurElement1,Path=ActualWidth}" Background="{TemplateBinding Background}" BorderThickness="1" Margin="-1.5"/>
+                <Border Opacity="1"    BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="{Binding ElementName=BlurElement1,Path=CornerRadius}" Canvas.Left="{Binding ElementName=BlurElement1,Path = (Canvas.Left)}" Canvas.Top="{Binding ElementName=BlurElement1,Path = (Canvas.Top)}" Height="{Binding ElementName=BlurElement1,Path=ActualHeight}" Width="{Binding ElementName=BlurElement1,Path=ActualWidth}" Background="Transparent" BorderThickness="1" Margin="-1.5"/>
             </Grid>
         </ControlTemplate>
         <ControlTemplate TargetType="Label" x:Key="BlurEffectSemi1">
@@ -110,7 +111,14 @@
             </Grid>
         </ControlTemplate>
 
-        <Style TargetType="Button">
+        <ControlTemplate TargetType="TextBox" x:Key="BlurEffectTextbox">
+            <Grid Canvas.Top="{TemplateBinding Canvas.Top}" Canvas.Left="{TemplateBinding Canvas.Left}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                <Label Name="BackgroundText" Canvas.Top="{TemplateBinding Canvas.Top}" Canvas.Left="{TemplateBinding Canvas.Left}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Template="{StaticResource BlurEffect1}" BorderBrush="Black" Background="WhiteSmoke"  Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+                <ScrollViewer x:Name="PART_ContentHost" Margin="5"/>
+            </Grid>
+        </ControlTemplate>
+        
+        <Style TargetType="Button" x:Key="MainMenu">
             <Style.Triggers>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -180,23 +188,39 @@
     </Window.Resources>
     <Canvas x:Name="MainCanvas"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
 
-        <Image x:Name="BackgroundImage" d:Visibility="Hidden"  Source="/Image/Image1.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
-        <Image x:Name="BackgroundImage2" d:Visibility="Visible"  Source="/Image/Image2.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
+        <Image x:Name="BackgroundImage"  d:Visibility="Collapsed" Visibility="Visible" Source="/Image/Image1.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
+        <Image x:Name="BackgroundImage1" Visibility="{Binding Visibility, ElementName=BackgroundImage,Converter={StaticResource InverseVisible}}"  Source="/Image/Image2.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
         <!--#region New Project-->
-        <Label Content="Project Name" FontFamily="Cascadia Code"/>
+        <Label Content="Create new project!!!" FontSize="40" Foreground="White" FontFamily="Cascadia Code" Canvas.Top="10" Canvas.Left="155">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="0" ShadowDepth="2"/>
+            </Label.Effect>
+        </Label>
+               
+        <Label Template="{StaticResource BlurEffect1}" BorderBrush="Black" Background="SkyBlue" Canvas.Top="92.5" Canvas.Left="243.5" Width="313" Height="40" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <Label     Canvas.Top="100" Canvas.Left="253.5" Content="Project Name" Padding="0" FontFamily="Cascadia Code" FontSize="14" Height="26"  VerticalAlignment="Center" VerticalContentAlignment="Center" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <TextBox   Canvas.Top="97.5" Canvas.Left="356.5" Height="30" Width="196" Background="WhiteSmoke" VerticalContentAlignment="Center"  FontFamily="Cascadia Code" BorderBrush="Black" Template="{StaticResource BlurEffectTextbox}" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+
+        <Label   Canvas.Top="150" Canvas.Left="125" Width="550" Height="250"  Template="{StaticResource BlurEffect1}" BorderBrush="Black" Background="SkyBlue"    Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <Label   Canvas.Top="160" Canvas.Left="135" Content="Project Description" Padding="0" FontFamily="Cascadia Code"  Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <TextBox Text="Test string" Canvas.Top="175" Canvas.Left="135" Height="215" Width="530" BorderBrush="Transparent" FontFamily="Cascadia Code"  Background="WHITE" Template="{StaticResource BlurEffectTextbox}" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+
+        <Button Content="Back" Height="50" Width="96" Canvas.Top="400" Canvas.Left="499" />
+        <Button Content="Quit" Height="50" Width="96" Canvas.Top="400" Canvas.Left="599" Click="ExitApp"/>
+        <Button Content="Save" Height="50" Width="96" Canvas.Top="400" Canvas.Left="699" />
 
         <!--#region ProjectSelection-->
-        <Border CornerRadius="0" BorderThickness="1"  BorderBrush="DarkGreen" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
+        
         <Label Template="{StaticResource BlurEffect}" Background="#011f09" BorderBrush="DarkGreen" Height="430" Width="200"  Canvas.Left="10" Canvas.Top="10" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
             <Label.Effect>
                 <DropShadowEffect Color="Black" Direction="0" BlurRadius="5" ShadowDepth="2"/>
             </Label.Effect>
         </Label>
 
-        <Button Content="New"    Canvas.Left="10" Canvas.Top="010" Width="180" Click="NewProject" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
-        <Button Content="Open"   Canvas.Left="10" Canvas.Top="070" Width="180" Click="OpenedProject"  Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
-        <Button Content="Recent" Canvas.Left="10" Canvas.Top="130" Width="180" Click="RecentProject" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
-        <Button Content="Exit"   Canvas.Left="10" Canvas.Top="190" Width="180" Click="ExitApp" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
+        <Button Content="New"    Canvas.Left="10" Canvas.Top="010" Width="180" Click="NewProject"    Style="{StaticResource MainMenu}" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
+        <Button Content="Open"   Canvas.Left="10" Canvas.Top="070" Width="180" Click="OpenedProject" Style="{StaticResource MainMenu}" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
+        <Button Content="Recent" Canvas.Left="10" Canvas.Top="130" Width="180" Click="RecentProject" Style="{StaticResource MainMenu}" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
+        <Button Content="Exit"   Canvas.Left="10" Canvas.Top="190" Width="180" Click="ExitApp"       Style="{StaticResource MainMenu}" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
 
         <Label Height="190" Width="570" Canvas.Top="10" Canvas.Left="220" BorderBrush="DarkGreen" Background="#011f09" Template="{StaticResource BlurEffectSemi}" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
             <Label.Effect>
@@ -234,6 +258,5 @@
             </Label.Effect>
         </Label>
         <!--#endregion-->
-
     </Canvas>
 </Window>
