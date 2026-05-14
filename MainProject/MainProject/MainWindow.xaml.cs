@@ -33,9 +33,6 @@ namespace MainProject
                 switch (project.SelectedOption)
                 {
                     case ProjectSelectionOptions.New:
-                    //case ProjectSelectionOptions.Recent:
-                    //case ProjectSelectionOptions.Opened:
-                    //case ProjectSelectionOptions.Saved:
                         InitializeComponent();
                         return;
                 }
@@ -54,19 +51,7 @@ namespace MainProject
         {
             try
             {
-                switch (this.StartUpSequence)
-                {
-                    case ProjectSelectionOptions.New:
-                        Dispatcher.Invoke(() =>
-                        {
-                            var Project = new CreateProject();
-                            this.Height = Project.Height;
-                            this.Width  = Project.Width;
-                            this.EntireScreen.Visibility = Visibility.Visible;
-                            this.EntireScreenFrame.Content = Project;
-                        });
-                        break;
-                }
+                
             }
             catch (Exception ex)
             {
