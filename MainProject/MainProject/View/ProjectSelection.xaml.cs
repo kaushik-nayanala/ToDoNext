@@ -106,5 +106,10 @@ namespace MainProject.View
         {
             this.DragMove();
         }
+
+        private void BackApp(object sender, RoutedEventArgs e)
+        {
+            this.BackgroundImage.Visibility = Visibility.Visible;
+        }
     }
 }
