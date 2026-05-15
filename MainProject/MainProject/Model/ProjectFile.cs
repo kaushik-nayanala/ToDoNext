@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace MainProject.Model
 {
-    class ProjectFile
+    public class ProjectFile
     {
+        public MetaData MetaData = new MetaData();
+    }
+
+    public class MetaData
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

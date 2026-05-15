@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MainProject" MouseDown="Window_MouseDown"
+        xmlns:local="clr-namespace:MainProject" MouseDown="Window_MouseDown" Loaded="Window_Loaded"
         mc:Ignorable="d" Background="Transparent" WindowStyle="None" AllowsTransparency="True"
         Title="ProjectSelection" Height="450" Width="800">
     <Window.Resources>
@@ -180,11 +180,14 @@
                     <Setter Property="Height" Value="40"/>
                     <Setter Property="BorderThickness" Value="0"/>
                 </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Template" Value="{DynamicResource NotEnabledTemplateNewProject}"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
-        <ControlTemplate x:Key="NotPressedTemplateNewProject" TargetType="Button">
+        <ControlTemplate x:Key="NotEnabledTemplateNewProject" TargetType="Button">
             <Canvas >
-                <Label  Background="WhiteSmoke" Opacity="1" Template="{StaticResource BlurEffect1}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}"  BorderBrush="Black" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="{TemplateBinding BorderThickness}">
+                <Label  Background="Gray" Opacity="1" Template="{StaticResource BlurEffect1}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}"  BorderBrush="Gray" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="{TemplateBinding BorderThickness}">
                     <Label.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
                             <BeginStoryboard>
@@ -195,7 +198,60 @@
                         </EventTrigger>
                     </Label.Triggers>
                 </Label>
-                <Label Content="{TemplateBinding Content}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" FontSize="22" Padding="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
+                <Label Content="{TemplateBinding Content}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" FontSize="22" Padding="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="Gray"/>
+            </Canvas>
+        </ControlTemplate>
+        <ControlTemplate x:Key="NotPressedTemplateNewProject" TargetType="Button">
+            <Canvas >
+                <Label  Background="WhiteSmoke" Opacity="1" Template="{StaticResource BlurEffect1}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}"  BorderBrush="Black" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label  BorderBrush="LightSkyBlue" Background="SkyBlue" Opacity="0" Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"  Template="{StaticResource BlurEffect1}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Label Content="{TemplateBinding Content}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" FontSize="22" Padding="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="White">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Label Opacity="0" Content="{TemplateBinding Content}" Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" HorizontalContentAlignment="Center" FontSize="22" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="LightSkyBlue">
+                    <Label.Effect>
+                        <DropShadowEffect BlurRadius="0" ShadowDepth="1.25"/>
+                    </Label.Effect>
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
             </Canvas>
         </ControlTemplate>
         <ControlTemplate x:Key="PressedTemplateNewProject" TargetType="Button">
@@ -205,16 +261,49 @@
                         <EventTrigger RoutedEvent="Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
                     </Label.Triggers>
                 </Label>
+                <Label  Background="WhiteSmoke" Opacity="0" Template="{StaticResource BlurEffect1}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}"  BorderBrush="Black" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.5"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+                
                 <Label Opacity="1" Content="{TemplateBinding Content}" Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" HorizontalContentAlignment="Center" FontSize="22" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="LightSkyBlue">
                     <Label.Effect>
                         <DropShadowEffect BlurRadius="0" ShadowDepth="1.25"/>
                     </Label.Effect>
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Label Opacity="0" Content="{TemplateBinding Content}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}" FontSize="22" Padding="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="SemiBold" Foreground="White">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:.5"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
                 </Label>
             </Canvas>
         </ControlTemplate>
@@ -272,28 +361,30 @@
 
         <Image x:Name="BackgroundImage"  d:Visibility="Visible" Visibility="Visible" Source="/Image/Image1.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
         <Image x:Name="BackgroundImage1" d:Visibility="{Binding Visibility, ElementName=BackgroundImage,Converter={StaticResource InverseVisible}}" Visibility="{Binding Visibility, ElementName=BackgroundImage,Converter={StaticResource InverseVisible}}"  Source="/Image/Image2.jpg" Stretch="UniformToFill" Height="{Binding ElementName=MainCanvas,Path=ActualHeight}" Width="{Binding ElementName=MainCanvas,Path=ActualWidth}"/>
+        
         <!--#region New Project-->
         <Label Content="Create new project!!!" FontSize="40" Foreground="White" FontFamily="Cascadia Code" Canvas.Top="10" Canvas.Left="155">
             <Label.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="0" ShadowDepth="2"/>
             </Label.Effect>
         </Label>
-               
-        <Label Template="{StaticResource BlurEffect1}" BorderBrush="Black" Background="SkyBlue" Canvas.Top="92.5" Canvas.Left="243.5" Width="313" Height="40" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
-        <Label     Canvas.Top="100" Canvas.Left="253.5" Content="Project Name" Padding="0" FontFamily="Cascadia Code" FontSize="14" Height="26"  VerticalAlignment="Center" VerticalContentAlignment="Center" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
-        <TextBox   Canvas.Top="97.5" Canvas.Left="356.5" Height="30" Width="196" Background="WhiteSmoke" VerticalContentAlignment="Center"  FontFamily="Cascadia Code" BorderBrush="Black" Template="{StaticResource BlurEffectTextbox}" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+
+        <Label   Canvas.Top="92.5" Canvas.Left="243.5" Height="40" Width="313"  Template="{StaticResource BlurEffect1}" BorderBrush="Black" Background="SkyBlue"  Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <Label   Canvas.Top="100"  Canvas.Left="253.5" Height="26"  Content="Project Name" Padding="0" FontFamily="Cascadia Code" FontSize="14"  VerticalAlignment="Center" VerticalContentAlignment="Center" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <TextBox x:Name="ProjectNameTb" TextChanged="TextboxHandler" Canvas.Top="97.5" Canvas.Left="356.5" Height="30" Width="196" Background="WhiteSmoke" VerticalContentAlignment="Center"  FontFamily="Cascadia Code" BorderBrush="Black" Template="{StaticResource BlurEffectTextbox}" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
 
         <Label   Canvas.Top="150" Canvas.Left="10" Width="780" Height="250"  Template="{StaticResource BlurEffect1}" BorderBrush="Black" Background="SkyBlue"    Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
         <Label   Canvas.Top="160" Canvas.Left="20" Content="Project Description" Padding="0" FontFamily="Cascadia Code"  Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
-        <TextBox Text="Test string" Canvas.Top="175" Canvas.Left="20" Height="215" Width="760" BorderBrush="Transparent" FontFamily="Cascadia Code"  Background="WHITE" Template="{StaticResource BlurEffectTextbox}" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+        <TextBox x:Name="ProjectDescTb" TextChanged="TextboxHandler" TextWrapping="Wrap" Canvas.Top="175" Canvas.Left="20" Height="215" Width="760" BorderBrush="Transparent" FontFamily="Cascadia Code"  Background="WHITE" Template="{StaticResource BlurEffectTextbox}" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
 
             
         <Grid>
             <Button Content="Back" Height="45" Width="100" Canvas.Top="402.5" Canvas.Left="479" Style="{StaticResource NewProjectBtn}" Click="BackApp"   Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}" />
             <Button Content="Quit" Height="45" Width="100" Canvas.Top="402.5" Canvas.Left="584" Style="{StaticResource NewProjectBtn}" Click="ExitApp"   Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
-            <Button Content="Save" Height="45" Width="100" Canvas.Top="402.5" Canvas.Left="690" Style="{StaticResource NewProjectBtn}" IsEnabled="False" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
+            <Button x:Name="SaveBtn" Click="Save" Content="Save" Height="45" Width="100" Canvas.Top="402.5" Canvas.Left="690" Style="{StaticResource NewProjectBtn}" IsEnabled="False" Visibility="{Binding ElementName=BackgroundImage1,Path=Visibility}"/>
         </Grid>
-
+        <!--#endregion-->
+        
         <!--#region ProjectSelection-->
         
         <Label Template="{StaticResource BlurEffect}" Opacity="1" Background="#011f09" BorderBrush="DarkGreen" Height="430" Width="200"  Canvas.Left="10" Canvas.Top="10" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
@@ -331,6 +422,11 @@
                 <DropShadowEffect BlurRadius="0" ShadowDepth="1"/>
             </Label.Effect>
         </Label>
+        <Label Content="Project Selection" Foreground="White" Canvas.Top="11" FontWeight="Bold" FontSize="18" Canvas.Left="600" FontFamily="Cascadia Code" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
+            <Label.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="0" ShadowDepth="1"/>
+            </Label.Effect>
+        </Label>
 
         <Label Height="230" Width="570" Canvas.Top="210" Canvas.Left="220" BorderBrush="DarkGreen" Background="#011f09" Template="{StaticResource BlurEffectSemi}" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
             <Label.Effect>
@@ -343,6 +439,13 @@
                 <DropShadowEffect Color="Black" ShadowDepth="1" BlurRadius="0"/>
             </Label.Effect>
         </Label>
+        <ScrollViewer Canvas.Top="240" Canvas.Left="230" Width="550" >
+            <Grid Name="SavedGrid">
+                
+            </Grid>
+        </ScrollViewer>
+
         <!--#endregion-->
+        
     </Canvas>
 </Window>
