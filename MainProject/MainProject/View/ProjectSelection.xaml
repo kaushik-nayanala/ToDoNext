@@ -185,6 +185,45 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="Button" x:Key="SavedProjectBtn">
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsPressed" Value="False"/>
+                        <Condition Property="IsMouseOver" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Template" Value="{DynamicResource NotPressedTemplateSavedProject}"/>
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </MultiTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Template" Value="{DynamicResource PressedTemplateNewProject}"/>
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Template" Value="{DynamicResource NotEnabledTemplateNewProject}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate x:Key="NotPressedTemplateSavedProject" TargetType="Button">
+            <Grid>
+                <Border Background="Black" Opacity="0.5" CornerRadius="4">
+                    
+                </Border>
+                <Border Background="Transparent" BorderThickness="1" BorderBrush="Black" Opacity="1" CornerRadius="4">
+
+                </Border>
+                <Label Content="{TemplateBinding Content}" Padding="0" FontFamily="Cascadia Code" Foreground="LightGray" Margin="5,2,0,0">
+                    <Label.Effect>
+                        <DropShadowEffect ShadowDepth="0.5" Color="DarkGray" BlurRadius="0"/>
+                    </Label.Effect>
+                </Label>
+            </Grid>
+        </ControlTemplate>
+
         <ControlTemplate x:Key="NotEnabledTemplateNewProject" TargetType="Button">
             <Canvas >
                 <Label  Background="Gray" Opacity="1" Template="{StaticResource BlurEffect1}"  Canvas.Left="{TemplateBinding Canvas.Left}" Canvas.Top="{TemplateBinding Canvas.Top}"  BorderBrush="Gray" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" BorderThickness="{TemplateBinding BorderThickness}">
@@ -434,14 +473,14 @@
             </Label.Effect>
         </Label>
         <Line X1="0,10" Y1="0,0" Canvas.Top="230" StrokeThickness="1" Stroke="DarkGreen" Stretch="UniformToFill" Canvas.Left="230" Width="550" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}"/>
-        <Label Canvas.Top="210" Canvas.Left="230" Foreground="White" Content="Saved Projects" FontFamily="Consolas" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
+        <Label Canvas.Top="210" Canvas.Left="230"  Foreground="White" Content="Saved Projects" FontFamily="Consolas" Visibility="{Binding ElementName=BackgroundImage,Path=Visibility}">
             <Label.Effect>
                 <DropShadowEffect Color="Black" ShadowDepth="1" BlurRadius="0"/>
             </Label.Effect>
         </Label>
-        <ScrollViewer Canvas.Top="240" Canvas.Left="230" Width="550" >
+        <ScrollViewer Canvas.Top="240" Canvas.Left="230" Width="550" Height="190">
             <Grid Name="SavedGrid">
-                
+                <Button Content="Project name"  Tag="Time" Height="100" Width="137.5" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SavedProjectBtn}" />
             </Grid>
         </ScrollViewer>
 

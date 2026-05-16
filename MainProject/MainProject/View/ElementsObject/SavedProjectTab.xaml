@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="MainProject.View.ElementsObject.SavedProjectTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MainProject.View.ElementsObject"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="137.5">
+    <UserControl.Background >
+        <ImageBrush Stretch="Fill" d:ImageSource="/Image/Image2.jpg">
+            
+        </ImageBrush>
+    </UserControl.Background>
+    <Grid>
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Opacity="0.5" CornerRadius="4">
+
+        </Border>
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black" CornerRadius="4">
+            
+        </Border>
+        <Label Content="Project name" Foreground="LightGray" FontFamily="Cascadia Code">
+            <Label.Effect>
+                <DropShadowEffect ShadowDepth="1" Color="Gray" BlurRadius="0"/>
+            </Label.Effect>
+        </Label>
+    </Grid>
+</UserControl>

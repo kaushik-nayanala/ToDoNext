@@ -5,6 +5,9 @@
     <Compile Update="View\BasicElementPanel.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\ElementsObject\SavedProjectTab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\Homepage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

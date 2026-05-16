@@ -185,11 +185,47 @@ namespace MainProject.View
         {
             var obj = Directory.GetFiles(SetupDirectories.SavedProjectPath).Where(x=>x.EndsWith(".tdn"));
 
+            var files = new List<ProjectFile>();
+            foreach (var file in obj) 
+            {
+                files.Add(JsonConvert.DeserializeObject<ProjectFile>(File.ReadAllText(file)));
+            }
+
+            SavedGrid.ColumnDefinitions.Clear();
+
             for (int i = 0; i < 4; i++)
             {
-
                 SavedGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                
+            }
+            
+            var d = Math.Ceiling(files.Count/4.0);
+            int rowcount = Convert.ToInt32(d + 1);
+
+            for(int i = 0; i < rowcount; i++)
+            {
+                SavedGrid.RowDefinitions.Add(new RowDefinition());
+                SavedGrid.RowDefinitions[i].Height = new GridLength(100);
+                if (i == rowcount - 1)
+                {
+                    SavedGrid.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+                }
+            }
+
+            int col = 0;
+            int row = 0;
+            foreach (var item in files) 
+            {
+                var btn = new Button();
+                btn.Content = item.MetaData.Name;
+                Grid.SetColumn(btn, col);
+                Grid.SetRow(btn, row);
+                SavedGrid.Children.Add(btn);
+                col++;
+                if (col == 4)
+                {
+                    col = 0;
+                    row ++;
+                }
             }
         }
     }
