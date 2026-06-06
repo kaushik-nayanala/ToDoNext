@@ -6,11 +6,36 @@
              xmlns:local="clr-namespace:MainProject.View.ElementsObject"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="137.5">
-    <UserControl.Background >
-        <ImageBrush Stretch="Fill" d:ImageSource="/Image/Image2.jpg">
-            
-        </ImageBrush>
-    </UserControl.Background>
+    <UserControl.Resources>
+        <Style TargetType="ToggleButton">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Grid>
+                                    <Border Background="Black" BorderBrush="Gray" BorderThickness="1" CornerRadius="4"/>
+                                    <Label Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="LightGray" FontSize="9"  Padding="0" FontFamily="Cascadia Code"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Grid>
+                                    <Border Background="Black" BorderBrush="LightGreen" BorderThickness="1" CornerRadius="4"/>
+                                    <Label Content="Selected" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="LightGreen" FontSize="9"  Padding="0" FontFamily="Cascadia Code"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Opacity="0.5" CornerRadius="4">
 
@@ -18,10 +43,18 @@
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black" CornerRadius="4">
             
         </Border>
-        <Label Content="Project name" Foreground="LightGray" FontFamily="Cascadia Code">
+        <Label Name="ProjectName" Content="Project name" Foreground="LightGray" FontFamily="Cascadia Code">
             <Label.Effect>
                 <DropShadowEffect ShadowDepth="1" Color="Gray" BlurRadius="0"/>
             </Label.Effect>
         </Label>
+        <Label Name="CreationDate" Content="Day" HorizontalAlignment="Right" Padding="0" FontFamily="Cascadia Code" FontSize="8" Foreground="Gray" Margin="0,2.5,2,0" VerticalAlignment="Top"/>
+        <Label Name="CreationTime" Content="Time" HorizontalAlignment="Right" Padding="0" FontFamily="Cascadia Code" FontSize="8" Foreground="Gray" Margin="0,15,2,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Description" Margin="3.5,20,25,0" FontSize="9" Padding="0" IsReadOnly="True" TextWrapping="Wrap" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Text="Description of the project that is been worked on" Foreground="WhiteSmoke" FontFamily="Cascadia Code">
+            <TextBox.Effect>
+                <DropShadowEffect ShadowDepth="1" Color="Gray" BlurRadius="0"/>
+            </TextBox.Effect>
+        </TextBox>
+        <ToggleButton HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="64" Content="Select" Checked="Selected" Unchecked="UnSelected"/>
     </Grid>
 </UserControl>

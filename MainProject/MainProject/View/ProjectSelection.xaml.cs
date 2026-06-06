@@ -1,5 +1,6 @@
 ﻿using MainProject.Model;
 using MainProject.Utility;
+using MainProject.View.ElementsObject;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -188,11 +189,22 @@ namespace MainProject.View
             var files = new List<ProjectFile>();
             foreach (var file in obj) 
             {
-                files.Add(JsonConvert.DeserializeObject<ProjectFile>(File.ReadAllText(file)));
+                var tempobj = JsonConvert.DeserializeObject<ProjectFile>(File.ReadAllText(file));
+                if (tempobj == null) continue;
+                if (string.IsNullOrEmpty(tempobj.MetaData.CreatedDate))
+                {
+                    tempobj.MetaData.CreatedDate= new FileInfo(file).CreationTime.ToString("M");
+                }
+                if (string.IsNullOrEmpty(tempobj.MetaData.CreatedTime))
+                {
+                    tempobj.MetaData.CreatedTime = new FileInfo(file).CreationTime.ToString("t");
+                }
+                files.Add(tempobj);
             }
 
             SavedGrid.ColumnDefinitions.Clear();
-
+            SavedGrid.RowDefinitions.Clear();
+            SavedGrid.Children.Clear();
             for (int i = 0; i < 4; i++)
             {
                 SavedGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -215,8 +227,8 @@ namespace MainProject.View
             int row = 0;
             foreach (var item in files) 
             {
-                var btn = new Button();
-                btn.Content = item.MetaData.Name;
+                var btn = new SavedProjectTab(item.MetaData.Name,item.MetaData.Description,item.MetaData.CreatedTime,item.MetaData.CreatedDate);
+                btn.Margin = new Thickness(2);
                 Grid.SetColumn(btn, col);
                 Grid.SetRow(btn, row);
                 SavedGrid.Children.Add(btn);
